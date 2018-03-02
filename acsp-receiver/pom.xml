@@ -13,4 +13,11 @@
     <artifactId>acsp-receiver</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.emnify.acsp</groupId>
+            <artifactId>acsp-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>
