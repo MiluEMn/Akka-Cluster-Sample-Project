@@ -30,7 +30,7 @@ public class ReceiverActor extends AbstractActor {
           log.info("Receiver #{} received message {} from sender {}",
               receiverId, message.getMessageId(), message.getSenderId());
         }).matchAny(object -> {
-          log.warning("Receiver #{} ignoring unexpected message of class {}",
+          log.warning("Receiver #{} ignoring unexpected message of {}",
               receiverId, object.getClass());
         }).build();
   }
