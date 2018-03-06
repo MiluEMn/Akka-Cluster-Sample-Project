@@ -16,7 +16,7 @@ public class ReceiverSupervisor extends AbstractActor {
   public void preStart() {
 
     Long numReceivers = getContext().system().settings().config().getLong("num-receivers");
-    for(long l = 1L; l <= numReceivers; l++) {
+    for (long l = 1L; l <= numReceivers; l++) {
       receiverActors.add(getContext().actorOf(ReceiverActor.props(l), "receiver" + l));
     }
   }
@@ -26,7 +26,7 @@ public class ReceiverSupervisor extends AbstractActor {
 
     return receiveBuilder()
         .match(Message.class,
-            message -> getReceiver(message.getMessageId()).tell(message, getSender()))
+            message -> getReceiver(message.getMessageId()).forward(message, getContext()))
         .build();
   }
 

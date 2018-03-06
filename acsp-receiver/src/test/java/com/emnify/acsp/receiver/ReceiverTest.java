@@ -1,4 +1,4 @@
-package com.emnify.acsp;
+package com.emnify.acsp.receiver;
 
 import com.emnify.acsp.common.AbstractAcspTest;
 import com.emnify.acsp.common.Message;

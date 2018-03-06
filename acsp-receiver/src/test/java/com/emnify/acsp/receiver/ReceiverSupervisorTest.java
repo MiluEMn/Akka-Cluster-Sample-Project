@@ -1,9 +1,9 @@
-package com.emnify.acsp;
+package com.emnify.acsp.receiver;
 
 import com.emnify.acsp.common.AbstractAcspTest;
 import com.emnify.acsp.common.Message;
-import com.emnify.acsp.helper.CheckActorExistsMessage;
-import com.emnify.acsp.helper.IdentifyHelperActor;
+import com.emnify.acsp.receiver.helper.CheckActorExistsMessage;
+import com.emnify.acsp.receiver.helper.IdentifyHelperActor;
 import com.emnify.acsp.receiver.ReceiverSupervisor;
 
 import akka.actor.ActorRef;
@@ -49,24 +49,27 @@ public class ReceiverSupervisorTest extends AbstractAcspTest {
   public void testMessageDistribution() {
 
     ActorRef rsv = system.actorOf(Props.create(ReceiverSupervisor.class), "rsv");
+    Message[] messages = new Message[]{
+        new Message(1L, 1L),
+        new Message(2L, 1L),
+        new Message(2L, 1L),
+        new Message(3L, 1L),
+        new Message(3L, 1L),
+    };
 
-    EventFilter.info(null, "akka://acps-test/user/rsv/receiver1", null,
+    EventFilter.info(null, "akka://acsp-test/user/rsv/receiver1", null,
         "Receiver #1 received message*", 2).intercept(() -> {
-      rsv.tell(new Message(1L, 1L), ActorRef.noSender());
-      rsv.tell(new Message(2L, 1L), ActorRef.noSender());
-      rsv.tell(new Message(2L, 1L), ActorRef.noSender());
-      rsv.tell(new Message(3L, 1L), ActorRef.noSender());
-      rsv.tell(new Message(3L, 1L), ActorRef.noSender());
+      for (Message message : messages) {
+        rsv.tell(message, ActorRef.noSender());
+      }
       return null;
     }, system);
 
-    EventFilter.info(null, "akka://acps-test/user/rsv/receiver2", null,
+    EventFilter.info(null, "akka://acsp-test/user/rsv/receiver2", null,
         "Receiver #2 received message*", 3).intercept(() -> {
-      rsv.tell(new Message(1L, 1L), ActorRef.noSender());
-      rsv.tell(new Message(2L, 1L), ActorRef.noSender());
-      rsv.tell(new Message(2L, 1L), ActorRef.noSender());
-      rsv.tell(new Message(3L, 1L), ActorRef.noSender());
-      rsv.tell(new Message(3L, 1L), ActorRef.noSender());
+      for (Message message : messages) {
+        rsv.tell(message, ActorRef.noSender());
+      }
       return null;
     }, system);
   }

@@ -1,4 +1,4 @@
-package com.emnify.acsp.helper;
+package com.emnify.acsp.receiver.helper;
 
 import akka.actor.ActorSelection;
 

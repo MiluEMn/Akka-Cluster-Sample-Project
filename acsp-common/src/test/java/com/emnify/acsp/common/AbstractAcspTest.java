@@ -20,7 +20,7 @@ public abstract class AbstractAcspTest {
   public void setupSystem() {
 
     Config config = ConfigFactory.load("test-application.conf");
-    system = ActorSystem.create("acps-test", config);
+    system = ActorSystem.create("acsp-test", config);
   }
 
   @After
