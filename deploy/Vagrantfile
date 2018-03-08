@@ -1,0 +1,38 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/xenial64"
+  config.ssh.forward_agent = true
+
+  config.vm.provider :virtualbox do |vb|
+    vb.linked_clone = true if Gem::Version.new(Vagrant::VERSION) >= Gem::Version.new('1.8.0')
+  end
+
+  config.vm.define "sender", primary: true do |box|
+    box.vm.hostname = "acsp-sender"
+    box.vm.network :private_network, ip: "10.99.99.10"
+    box.vm.provider :virtualbox do |vb|
+      vb.name = "acsp-sender"
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+    box.vm.provision "ansible" do |ansible|
+      #ansible.verbose = "vvv"
+      ansible.playbook = "acsp-sender.yml"
+    end
+  end
+
+  (1..2).each do |i|
+    config.vm.define "receiver#{i}" do |box|
+        box.vm.hostname = "acsp-receiver#{i}"
+        box.vm.network :private_network, ip: "10.99.99.#{10 + i}"
+        box.vm.provider :virtualbox do |vb|
+          vb.name = "acsp-receiver#{i}"
+          vb.memory = 1024
+          vb.cpus = 1
+        end
+        box.vm.provision "ansible" do |ansible|
+          #ansible.verbose = "vvv"
+          ansible.playbook = "acsp-receiver.yml"
+        end
+      end
+    end
+end

@@ -1,0 +1,19 @@
+- import_playbook: common.yml
+
+- hosts: all
+  become: yes
+  become_user: vagrant
+  tasks:
+    - name: Create sender config file
+      template:
+        src: templates/sender-application.conf
+        dest: /opt/acsp/acsp-sender/src/main/resources/application.conf
+
+    - name: Create sender run file
+      template:
+        src: sender_run.sh
+        dest: /opt/acsp/acsp-sender/sender_run.sh
+        mode: 0755
+
+    - name: Install the project
+      raw: cd /opt/acsp ; mvn install -DskipTests=true

@@ -1,0 +1,23 @@
+- import_playbook: common.yml
+
+- hosts: all
+  become: yes
+  become_user: vagrant
+  vars:
+    num_receivers: 2
+    seed_node_ip: 10.99.99.10
+    seed_node_port: 2551
+  tasks:
+    - name: Create receiver config file
+      template:
+        src: templates/receiver-application.conf
+        dest: /opt/acsp/acsp-receiver/src/main/resources/application.conf
+
+    - name: Create receiver run file
+      template:
+        src: receiver_run.sh
+        dest: /opt/acsp/acsp-receiver/receiver_run.sh
+        mode: 0755
+
+    - name: Install the project
+      raw: cd /opt/acsp ; mvn install -DskipTests=true
